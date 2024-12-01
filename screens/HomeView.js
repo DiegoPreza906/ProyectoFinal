@@ -19,7 +19,7 @@ export default function HomeView() {
 
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([
-    { label: "☁️ Weather Condition", value: "" },
+    { label: "Weather Condition", value: "" },
     { label: "Sunny", value: "sunny" },
     { label: "Cloudy", value: "cloudy" },
     { label: "Rainy", value: "rainy" },
@@ -36,11 +36,13 @@ export default function HomeView() {
 
   return (
     <ImageBackground
-      source={{ uri: "https://source.unsplash.com/featured/?city,night" }}
+      source={{
+        uri: "https://i.pinimg.com/originals/54/7b/30/547b30216e7a95667cd611965fa0c8e7.jpg",
+      }}
       style={styles.background}
     >
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={styles.keyboardAvoidingView}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <View style={styles.container}>
@@ -61,7 +63,7 @@ export default function HomeView() {
             placeholder="☁️ Select Weather Condition"
             style={styles.dropdown}
             dropDownContainerStyle={styles.dropdownContainer}
-            scrollEnabled={false} // Deshabilita el scroll interno del Dropdown
+            scrollEnabled={false}
           />
 
           <TextInput
@@ -102,14 +104,19 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     resizeMode: "cover",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  keyboardAvoidingView: {
+    flex: 1,
+    justifyContent: "center", // Centra verticalmente el contenido
+    alignItems: "center",
   },
   container: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
-    margin: 20,
+    width: "85%",
     padding: 20,
     borderRadius: 15,
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.3,
