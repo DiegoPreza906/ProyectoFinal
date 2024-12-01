@@ -5,7 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Image,
   ImageBackground,
   Alert,
 } from "react-native";
@@ -72,7 +71,7 @@ export default function LogIn() {
       </View>
 
       {/* Texto para redirigir a Sign Up */}
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
         <Text style={styles.signupText}>
           Don’t have an account? <Text style={styles.signupLink}>Sign Up</Text>
         </Text>
