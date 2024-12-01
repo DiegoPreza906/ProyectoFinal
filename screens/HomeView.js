@@ -7,6 +7,8 @@ import {
   StyleSheet,
   ImageBackground,
   KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
   Platform,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -35,68 +37,70 @@ export default function HomeView() {
   };
 
   return (
-    <ImageBackground
-      source={{
-        uri: "https://i.pinimg.com/originals/54/7b/30/547b30216e7a95667cd611965fa0c8e7.jpg",
-      }}
-      style={styles.background}
-    >
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoidingView}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ImageBackground
+        source={{
+          uri: "https://i.pinimg.com/originals/54/7b/30/547b30216e7a95667cd611965fa0c8e7.jpg",
+        }}
+        style={styles.background}
       >
-        <View style={styles.container}>
-          <Text style={styles.logo}>
-            Weather <Text style={styles.logoAccent}>Go</Text>
-          </Text>
-          <Text style={styles.title}>
-            Choose your perfect <Text style={styles.titleAccent}>weather</Text>
-          </Text>
+        <KeyboardAvoidingView
+          style={styles.keyboardAvoidingView}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <View style={styles.container}>
+            <Text style={styles.logo}>
+              Weather <Text style={styles.logoAccent}>Go</Text>
+            </Text>
+            <Text style={styles.title}>
+              Choose your perfect <Text style={styles.titleAccent}>weather</Text>
+            </Text>
 
-          <DropDownPicker
-            open={open}
-            value={weatherCondition}
-            items={items}
-            setOpen={setOpen}
-            setValue={setWeatherCondition}
-            setItems={setItems}
-            placeholder="☁️ Select Weather Condition"
-            style={styles.dropdown}
-            dropDownContainerStyle={styles.dropdownContainer}
-            scrollEnabled={false}
-          />
+            <DropDownPicker
+              open={open}
+              value={weatherCondition}
+              items={items}
+              setOpen={setOpen}
+              setValue={setWeatherCondition}
+              setItems={setItems}
+              placeholder="☁️ Select Weather Condition"
+              style={styles.dropdown}
+              dropDownContainerStyle={styles.dropdownContainer}
+              scrollEnabled={false}
+            />
 
-          <TextInput
-            style={styles.input}
-            placeholder="🌡️ Set Your Ideal Temp"
-            placeholderTextColor="#888"
-            keyboardType="numeric"
-            value={idealTemp}
-            onChangeText={setIdealTemp}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="☀️ Highest Temp (Temp in Celsius)"
-            placeholderTextColor="#888"
-            keyboardType="numeric"
-            value={highestTemp}
-            onChangeText={setHighestTemp}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="❄️ Lowest Temp (Temp in Celsius)"
-            placeholderTextColor="#888"
-            keyboardType="numeric"
-            value={lowestTemp}
-            onChangeText={setLowestTemp}
-          />
+            <TextInput
+              style={styles.input}
+              placeholder="🌡️ Set Your Ideal Temp"
+              placeholderTextColor="#888"
+              keyboardType="numeric"
+              value={idealTemp}
+              onChangeText={setIdealTemp}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="☀️ Highest Temp (Temp in Celsius)"
+              placeholderTextColor="#888"
+              keyboardType="numeric"
+              value={highestTemp}
+              onChangeText={setHighestTemp}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="❄️ Lowest Temp (Temp in Celsius)"
+              placeholderTextColor="#888"
+              keyboardType="numeric"
+              value={lowestTemp}
+              onChangeText={setLowestTemp}
+            />
 
-          <TouchableOpacity style={styles.button} onPress={handleSave}>
-            <Text style={styles.buttonText}>Find Your Perfect Trip</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-    </ImageBackground>
+            <TouchableOpacity style={styles.button} onPress={handleSave}>
+              <Text style={styles.buttonText}>Find Your Perfect Trip</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </ImageBackground>
+    </TouchableWithoutFeedback>
   );
 }
 

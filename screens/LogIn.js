@@ -7,6 +7,8 @@ import {
   StyleSheet,
   ImageBackground,
   Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons"; // Para el icono
@@ -28,55 +30,57 @@ export default function LogIn() {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Encabezado con Icono y Título */}
-      <View style={styles.header}>
-        <Icon name="place" size={50} color="#ff5b5b" />
-        <Text style={styles.title}>Log In</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        {/* Encabezado con Icono y Título */}
+        <View style={styles.header}>
+          <Icon name="place" size={50} color="#ff5b5b" />
+          <Text style={styles.title}>Log In</Text>
+        </View>
+
+        {/* Campos de Entrada */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            placeholderTextColor="#aaa"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#aaa"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
+        </View>
+
+        {/* Botón de Log In */}
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogIn}>
+          <Text style={styles.loginButtonText}>Log in</Text>
+        </TouchableOpacity>
+
+        {/* Imagen inferior */}
+        <View style={styles.imageContainer}>
+          <ImageBackground
+            source={{
+              uri: "https://img.freepik.com/foto-gratis/colores-otono-hojas-color-amarillo-dorado-marron-cubren-suelo-debajo-arboles_181624-31091.jpg",
+            }}
+            style={styles.backgroundImage}
+            imageStyle={styles.imageStyle}
+          />
+        </View>
+
+        {/* Texto para redirigir a Sign Up */}
+        <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+          <Text style={styles.signupText}>
+            Don’t have an account? <Text style={styles.signupLink}>Sign Up</Text>
+          </Text>
+        </TouchableOpacity>
       </View>
-
-      {/* Campos de Entrada */}
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          placeholderTextColor="#aaa"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="#aaa"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-      </View>
-
-      {/* Botón de Log In */}
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogIn}>
-        <Text style={styles.loginButtonText}>Log in</Text>
-      </TouchableOpacity>
-
-      {/* Imagen inferior */}
-      <View style={styles.imageContainer}>
-        <ImageBackground
-          source={{
-            uri: "https://img.freepik.com/foto-gratis/colores-otono-hojas-color-amarillo-dorado-marron-cubren-suelo-debajo-arboles_181624-31091.jpg",
-          }}
-          style={styles.backgroundImage}
-          imageStyle={styles.imageStyle}
-        />
-      </View>
-
-      {/* Texto para redirigir a Sign Up */}
-      <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-        <Text style={styles.signupText}>
-          Don’t have an account? <Text style={styles.signupLink}>Sign Up</Text>
-        </Text>
-      </TouchableOpacity>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 

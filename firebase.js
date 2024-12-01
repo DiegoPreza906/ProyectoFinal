@@ -1,5 +1,9 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -23,6 +27,18 @@ export const logIn = async (email, password) => {
     return userCredential.user; // Retorna los datos del usuario autenticado
   } catch (error) {
     console.error("Error al iniciar sesión:", error.message);
+    throw new Error(error.message); // Lanza el error para manejarlo en el componente
+  }
+};
+
+// Función para registrar un nuevo usuario
+export const signUp = async (email, password) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    console.log("Usuario registrado:", userCredential.user);
+    return userCredential.user; // Retorna los datos del usuario registrado
+  } catch (error) {
+    console.error("Error al registrar usuario:", error.message);
     throw new Error(error.message); // Lanza el error para manejarlo en el componente
   }
 };
