@@ -1,12 +1,7 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Configuración de Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAf4vbzSk7jmqGdcj59JNg07UzqwhoV3u8",
   authDomain: "proyecto-ianki.firebaseapp.com",
@@ -14,22 +9,24 @@ const firebaseConfig = {
   storageBucket: "proyecto-ianki.firebasestorage.app",
   messagingSenderId: "711122229447",
   appId: "1:711122229447:web:47dd2f3ee0ea733563c6e2",
-  //measurementId: "G-8RHR8YG9V4"
 };
 
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  } else {
-    firebase.app();
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// Función para manejar el login
+export const logIn = async (email, password) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    console.log("Usuario autenticado:", userCredential.user);
+    return userCredential.user; // Retorna los datos del usuario autenticado
+  } catch (error) {
+    console.error("Error al iniciar sesión:", error.message);
+    throw new Error(error.message); // Lanza el error para manejarlo en el componente
   }
-  
-  const auth = firebase.auth();
-  
-  const handleSignUp = async (email, password) => {
-    try {
-      const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-      console.log("User registered:", userCredential.user);
-    } catch (error) {
-      console.error("Error signing up:", error.message);
-    }
-  };
+};
+
+// Exporta las instancias necesarias
+export { auth };
+export default app;

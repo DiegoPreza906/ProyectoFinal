@@ -1,99 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Image,
+  ImageBackground,
   Alert,
-  ScrollView,
-} from 'react-native';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Importar íconos de Material
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/MaterialIcons"; // Para el icono
+import { logIn } from "../firebase"; // Asegúrate de que esta función esté correctamente implementada
 
-const auth = getAuth();
+export default function LogIn() {
+  const navigation = useNavigation(); // Hook para manejar navegación
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-export default function LogIn({ setIsAuthenticated }) {
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLogin, setIsLogin] = useState(true);
-  const [message, setMessage] = useState('');
-
-  const handleAuthentication = async () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Por favor, llena todos los campos');
-      return;
-    }
-
-    if (isLogin) {
-      // Login
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        setIsAuthenticated(true); // Autenticado exitosamente
-        setMessage('Login exitoso!');
-      } catch (error) {
-        if (error.code === 'auth/invalid-email') {
-          setMessage('El correo electrónico no es válido.');
-        } else if (error.code === 'auth/user-not-found') {
-          setMessage('No se encuentra un usuario con ese correo electrónico.');
-        } else if (error.code === 'auth/wrong-password') {
-          setMessage('La contraseña es incorrecta.');
-        } else {
-          setMessage('Error al iniciar sesión: ' + error.message);
-        }
-      }
-    } else {
-      // Registro
-      if (!username) {
-        Alert.alert('Error', 'Por favor, ingresa un nombre de usuario');
-        return;
-      }
-
-      try {
-        await createUserWithEmailAndPassword(auth, email, password);
-        setIsAuthenticated(true); // Usuario registrado y autenticado
-        setMessage('Usuario registrado exitosamente!');
-      } catch (error) {
-        if (error.code === 'auth/invalid-email') {
-          setMessage('El correo electrónico no es válido.');
-        } else if (error.code === 'auth/email-already-in-use') {
-          setMessage('El correo electrónico ya está en uso.');
-        } else if (error.code === 'auth/weak-password') {
-          setMessage('La contraseña es demasiado débil.');
-        } else {
-          setMessage('Error al registrar: ' + error.message);
-        }
-      }
+  const handleLogIn = async () => {
+    try {
+      const user = await logIn(email, password);
+      Alert.alert("Login exitoso", `Bienvenido, ${user.email}`);
+      navigation.navigate("HomeView"); // Redirige a HomeView si es exitoso
+    } catch (error) {
+      Alert.alert("Error al iniciar sesión", error.message);
     }
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.signUpContainer}>
-        <View style={styles.iconContainer}>
-          <Icon name="place" size={40} color="#fff" />
-        </View>
-        <Text style={styles.title}>{isLogin ? 'Login' : 'Sign Up'}</Text>
+    <View style={styles.container}>
+      {/* Encabezado con Icono y Título */}
+      <View style={styles.header}>
+        <Icon name="place" size={50} color="#ff5b5b" />
+        <Text style={styles.title}>Log In</Text>
+      </View>
 
+      {/* Campos de Entrada */}
+      <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Email"
+          placeholder="Username"
           placeholderTextColor="#aaa"
           value={email}
           onChangeText={setEmail}
         />
-
-        {!isLogin && (
-          <TextInput
-            style={styles.input}
-            placeholder="Username"
-            placeholderTextColor="#aaa"
-            value={username}
-            onChangeText={setUsername}
-          />
-        )}
-
         <TextInput
           style={styles.input}
           placeholder="Password"
@@ -102,75 +53,106 @@ export default function LogIn({ setIsAuthenticated }) {
           value={password}
           onChangeText={setPassword}
         />
-
-        <TouchableOpacity style={styles.signUpButton} onPress={handleAuthentication}>
-          <Text style={styles.signUpButtonText}>{isLogin ? 'Login' : 'Sign Up'}</Text>
-        </TouchableOpacity>
-
-        {message && <Text>{message}</Text>}
-
-        <TouchableOpacity onPress={() => setIsLogin(!isLogin)}>
-          <Text style={styles.toggleText}>
-            {isLogin
-              ? "Don't have an account? Sign Up"
-              : 'Already have an account? Login'}
-          </Text>
-        </TouchableOpacity>
       </View>
-    </ScrollView>
+
+      {/* Botón de Log In */}
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogIn}>
+        <Text style={styles.loginButtonText}>Log in</Text>
+      </TouchableOpacity>
+
+      {/* Imagen inferior */}
+      <View style={styles.imageContainer}>
+        <ImageBackground
+          source={{
+            uri: "https://source.unsplash.com/featured/?nature,waterfall",
+          }}
+          style={styles.backgroundImage}
+          imageStyle={styles.imageStyle}
+        />
+      </View>
+
+      {/* Texto para redirigir a Sign Up */}
+      <TouchableOpacity>
+        <Text style={styles.signupText}>
+          Don’t have an account? <Text style={styles.signupLink}>Sign Up</Text>
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f8f8f8',
+    backgroundColor: "#f8f8f8",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 20,
   },
-  signUpContainer: {
-    width: '90%',
-    alignItems: 'center',
+  header: {
+    alignItems: "center",
     marginTop: 50,
   },
-  iconContainer: {
-    backgroundColor: '#ff6666',
-    borderRadius: 50,
-    padding: 15,
-    marginBottom: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#333',
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#000",
+    marginTop: 10,
+  },
+  inputContainer: {
+    width: "90%",
+    alignItems: "center",
+    marginTop: 30,
   },
   input: {
-    width: '100%',
+    width: "100%",
+    height: 50,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 10,
-    padding: 10,
+    borderColor: "#ccc",
+    borderRadius: 25,
+    paddingHorizontal: 20,
     marginVertical: 10,
-    backgroundColor: '#fff',
     fontSize: 16,
+    backgroundColor: "#fff",
+    elevation: 2,
   },
-  signUpButton: {
-    backgroundColor: '#ff6666',
-    borderRadius: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 30,
+  loginButton: {
+    backgroundColor: "#ff5b5b",
+    width: "90%",
+    height: 50,
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+    elevation: 3,
+  },
+  loginButtonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  imageContainer: {
+    width: "100%",
+    height: 150,
+    justifyContent: "flex-end",
+    alignItems: "center",
     marginTop: 20,
   },
-  signUpButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+  backgroundImage: {
+    width: "100%",
+    height: "100%",
   },
-  toggleText: {
-    color: '#ff6666',
-    fontWeight: 'bold',
+  imageStyle: {
+    borderBottomLeftRadius: 120,
+    borderTopRightRadius: 120,
+  },
+  signupText: {
+    color: "#000",
+    fontSize: 14,
+    marginTop: 10,
+  },
+  signupLink: {
+    color: "#ff5b5b",
+    fontWeight: "bold",
   },
 });
