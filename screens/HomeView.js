@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   ImageBackground,
@@ -10,30 +9,32 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  Alert,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
+import { useNavigation } from "@react-navigation/native";
 
 export default function HomeView() {
-  const [weatherCondition, setWeatherCondition] = useState("");
-  const [idealTemp, setIdealTemp] = useState("");
-  const [highestTemp, setHighestTemp] = useState("");
-  const [lowestTemp, setLowestTemp] = useState("");
+  const [destination, setDestination] = useState("");
 
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([
-    { label: "Weather Condition", value: "" },
-    { label: "Sunny", value: "sunny" },
-    { label: "Cloudy", value: "cloudy" },
-    { label: "Rainy", value: "rainy" },
-    { label: "Snowy", value: "snowy" },
+    { label: "Mexico City, MX", value: "Mexico City" },
+    { label: "New York, US", value: "New York" },
+    { label: "London, UK", value: "London" },
+    { label: "Tokyo, JP", value: "Tokyo" },
   ]);
 
-  const handleSave = () => {
-    console.log("Weather Condition:", weatherCondition);
-    console.log("Ideal Temp:", idealTemp);
-    console.log("Highest Temp:", highestTemp);
-    console.log("Lowest Temp:", lowestTemp);
-    alert("Información guardada correctamente");
+  const navigation = useNavigation();
+
+  const handleFindTrip = () => {
+    if (!destination) {
+      Alert.alert("Error", "Por favor selecciona un destino.");
+      return;
+    }
+
+    // Navegar a ResultInfo con el destino seleccionado
+    navigation.navigate("ResultInfo", { destination });
   };
 
   return (
@@ -53,48 +54,23 @@ export default function HomeView() {
               Weather <Text style={styles.logoAccent}>Go</Text>
             </Text>
             <Text style={styles.title}>
-              Choose your perfect <Text style={styles.titleAccent}>weather</Text>
+              Choose your perfect <Text style={styles.titleAccent}>destination</Text>
             </Text>
 
             <DropDownPicker
               open={open}
-              value={weatherCondition}
+              value={destination}
               items={items}
               setOpen={setOpen}
-              setValue={setWeatherCondition}
+              setValue={setDestination}
               setItems={setItems}
-              placeholder="☁️ Select Weather Condition"
+              placeholder="🌍 Select Your Destination"
               style={styles.dropdown}
               dropDownContainerStyle={styles.dropdownContainer}
               scrollEnabled={false}
             />
 
-            <TextInput
-              style={styles.input}
-              placeholder="🌡️ Set Your Ideal Temp"
-              placeholderTextColor="#888"
-              keyboardType="numeric"
-              value={idealTemp}
-              onChangeText={setIdealTemp}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="☀️ Highest Temp (Temp in Celsius)"
-              placeholderTextColor="#888"
-              keyboardType="numeric"
-              value={highestTemp}
-              onChangeText={setHighestTemp}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="❄️ Lowest Temp (Temp in Celsius)"
-              placeholderTextColor="#888"
-              keyboardType="numeric"
-              value={lowestTemp}
-              onChangeText={setLowestTemp}
-            />
-
-            <TouchableOpacity style={styles.button} onPress={handleSave}>
+            <TouchableOpacity style={styles.button} onPress={handleFindTrip}>
               <Text style={styles.buttonText}>Find Your Perfect Trip</Text>
             </TouchableOpacity>
           </View>
@@ -153,15 +129,6 @@ const styles = StyleSheet.create({
   },
   dropdownContainer: {
     borderColor: "#ccc",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 10,
-    marginVertical: 8,
-    color: "#333",
-    backgroundColor: "#fff",
   },
   button: {
     backgroundColor: "#ff5b5b",
