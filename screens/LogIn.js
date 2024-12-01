@@ -11,11 +11,11 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/MaterialIcons"; // Para el icono
-import { logIn } from "../firebase"; // Asegúrate de que esta función esté correctamente implementada
+import Icon from "react-native-vector-icons/MaterialIcons"; 
+import { logIn } from "../firebase"; 
 
 export default function LogIn() {
-  const navigation = useNavigation(); // Hook para manejar navegación
+  const navigation = useNavigation(); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -23,7 +23,7 @@ export default function LogIn() {
     try {
       const user = await logIn(email, password);
       Alert.alert("Login exitoso", `Bienvenido, ${user.email}`);
-      navigation.navigate("HomeView"); // Redirige a HomeView si es exitoso
+      navigation.navigate("HomeView"); 
     } catch (error) {
       Alert.alert("Error al iniciar sesión", error.message);
     }
