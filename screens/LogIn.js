@@ -63,7 +63,7 @@ export default function LogIn() {
       <View style={styles.imageContainer}>
         <ImageBackground
           source={{
-            uri: "https://source.unsplash.com/featured/?nature,waterfall",
+            uri: "https://img.freepik.com/foto-gratis/colores-otono-hojas-color-amarillo-dorado-marron-cubren-suelo-debajo-arboles_181624-31091.jpg",
           }}
           style={styles.backgroundImage}
           imageStyle={styles.imageStyle}
